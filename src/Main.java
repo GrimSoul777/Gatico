@@ -69,6 +69,7 @@ public class Main {
                         break;
 
                     case 3:
+                        System.out.println("JUGADORES DISPONIBLES");
                         System.out.println("==============================================");
                         for (Jugador jugador : dao.listar()) {
                             System.out.println("ID: " + jugador.getId());
@@ -76,9 +77,9 @@ public class Main {
                             System.out.println("===============================================");
                         }
                         System.out.println();
-                        System.out.println("Seleccionar jugador 1");
+                        System.out.println("Seleccionar jugador 1 (Ingrese el nickname)");
                         String j1 = sc.nextLine().trim();
-                        System.out.println("Seleccionar jugador 2");
+                        System.out.println("Seleccionar jugador 2 (Ingrese el nickname)");
                         String j2 = sc.nextLine().trim();
 
                         Jugador jugador1 = dao.buscarPorNickname(j1);
@@ -126,6 +127,7 @@ public class Main {
                         }
 
                         System.out.println("PARTIDA INICIADA DEL GATO");
+                        System.out.println("INFORMACION GENERAL");
                         System.out.println(jugador1.getNickname() + " = " + simboloJugador1);
                         System.out.println(jugador2.getNickname() + " = " + simboloJugador2);
                         System.out.println();
@@ -165,6 +167,7 @@ public class Main {
                                     continue;
                                 }
 
+                                //Aqui se selecciona que fila y columna es dependiendo de lo que ingrese el jugador
                                 int fila = (posicion - 1) / 3;
                                 int columna = (posicion - 1) % 3;
 
