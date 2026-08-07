@@ -204,7 +204,24 @@ public class Main {
                                 partidaTerminada = true;
                             }
 
-                            // VERIFICAR EMPATE
+                            //VERIFICAR SI HAY EMPATE ANTICIPADO
+                            else if (empateAnticipado(tablero, simboloActual)) {
+                                mostrarTablero(tablero);
+
+                                System.out.println();
+                                System.out.println("YA NADIE PUEDE GANAR");
+                                System.out.println("EMPATE ANTICIPADO");
+
+                                jugador1.setTie(jugador1.getTie() + 1);
+                                jugador2.setTie(jugador2.getTie() + 1);
+
+                                dao.editar(jugador1);
+                                dao.editar(jugador2);
+
+                                partidaTerminada = true;
+                            }
+
+                            // VERIFICAR EMPATE SI EL TABLERO ESTA LLENO
                             else if (tableroLleno(tablero)) {
                                 mostrarTablero(tablero);
 
@@ -381,6 +398,155 @@ public class Main {
                 }
             }
         }
+        return true;
+    }
+
+    /*
+    public static boolean empateAnticipado(char[][] tablero) {
+        //FILAS
+        for (int i = 0; i < 3; i++) {
+            boolean hayX = false;
+            boolean hayO = false;
+
+            if (tablero[i][0] == 'X' ||
+                    tablero[i][1] == 'X' ||
+                    tablero[i][2] == 'X') {
+
+                hayX = true;
+            }
+
+            if (tablero[i][0] == 'O' ||
+                    tablero[i][1] == 'O' ||
+                    tablero[i][2] == 'O') {
+
+                hayO = true;
+            }
+
+            //Si hay X y O, esta fila ya está bloqueada
+            if (hayX && hayO) {
+                continue;
+            }
+
+            //Todavía existe posibilidad de ganar
+            return false;
+        }
+
+        //COLUMNAS
+        for (int i = 0; i < 3; i++) {
+            boolean hayX = false;
+            boolean hayO = false;
+
+            if (tablero[0][i] == 'X' ||
+                    tablero[1][i] == 'X' ||
+                    tablero[2][i] == 'X') {
+
+                hayX = true;
+            }
+
+            if (tablero[0][i] == 'O' ||
+                    tablero[1][i] == 'O' ||
+                    tablero[2][i] == 'O') {
+
+                hayO = true;
+            }
+
+            if (hayX && hayO) {
+                continue;
+            }
+            return false;
+        }
+
+        //DIAGONAL HACIA LA DERECHA
+        boolean hayX = false;
+        boolean hayO = false;
+
+        if (tablero[0][0] == 'X' ||
+                tablero[1][1] == 'X' ||
+                tablero[2][2] == 'X') {
+
+            hayX = true;
+        }
+
+        if (tablero[0][0] == 'O' ||
+                tablero[1][1] == 'O' ||
+                tablero[2][2] == 'O') {
+
+            hayO = true;
+        }
+
+        //SI NO HAY X y 0 aun se puede ganar
+        if (!(hayX && hayO)) {
+            return false;
+        }
+
+        //DIAGONAL HACI LA IZQUIERDA
+        hayX = false;
+        hayO = false;
+
+        if (tablero[0][2] == 'X' ||
+                tablero[1][1] == 'X' ||
+                tablero[2][0] == 'X') {
+
+            hayX = true;
+        }
+
+        if (tablero[0][2] == 'O' ||
+                tablero[1][1] == 'O' ||
+                tablero[2][0] == 'O') {
+
+            hayO = true;
+        }
+
+        if (!(hayX && hayO)) {
+            return false;
+        }
+
+        // Ninguna línea puede producir un ganador
+        return true;
+    }
+     */
+
+    public static int espaciosVacios(char[][] tablero) {
+        int espacios = 0;
+
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+
+                if (tablero[i][j] == ' ') {
+                    espacios++;
+                }
+            }
+        }
+
+        return espacios;
+    }
+
+    public static boolean empateAnticipado(char[][] tablero, char simbolo) {
+        if (espaciosVacios(tablero) != 2) {
+            return false;
+        }
+
+        //REVISA LUGARES VACIOS
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+
+                //ESTO REALIZA UNA JUGADA ANTICIPADA PARA VER SI EL JUGADOR QUE ESTE EN EL TURNO AUN PUEDE GANAR SI ES QUE QUEDAN DOS ESPACIOS
+                if (tablero[i][j] == ' ') {
+                    //PONER SIMBOLO
+                    tablero[i][j] = simbolo;
+
+
+                    if (hayGanador(tablero, simbolo)) {
+                        tablero[i][j] = ' ';
+                        return false;
+                    }
+
+                    //DESACE LA JUGADA
+                    tablero[i][j] = ' ';
+                }
+            }
+        }
+        // Ninguna de las 2 jugadas permite ganar
         return true;
     }
 }
